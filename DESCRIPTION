@@ -1,6 +1,6 @@
 Package: seg
-Version: 0.1-0
-Date: 2011-05-03
+Version: 0.1-2
+Date: 2012-03-30
 Title: A set of tools for residential segregation research
 Author: Seong-Yun Hong, David O'Sullivan
 Maintainer: Seong-Yun Hong <hong.seongyun@gmail.com>
@@ -17,6 +17,6 @@ LazyLoad: Yes
 Collate: SegLocalEnv-class.R SegLocalEnv.R SegLocalEnv-methods.R
         getSegLocalEnv.R SegSpatial-class.R SegSpatial-methods.R
         SegSpatial.R spseg.R
-Packaged: 2011-05-09 00:43:39 UTC; shon038
+Packaged: 2012-03-24 18:52:24 UTC; shon038
 Repository: CRAN
-Date/Publication: 2011-05-09 07:56:30
+Date/Publication: 2012-03-30 07:54:14
