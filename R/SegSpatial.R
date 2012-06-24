@@ -3,9 +3,40 @@
 #
 # Author: Seong-Yun Hong <hong.seongyun@gmail.com>
 # ------------------------------------------------------------------------------
-SegSpatial <- function(env, method = "all", useC = TRUE) {
+SegSpatial <- 
+  function(env, method = "all", useC = TRUE, negative.rm = FALSE, 
+           tol = .Machine$double.eps) {
 
   validObject(env)
+  dd <- slot(env, "data") + tol
+  ee <- slot(env, "env") + tol
+  
+  # Check if any of the original data values are 0 or less (often as a result
+  # of kernel smoothing)
+  negIDs <- apply(dd, 1, function(z) any(z <= 0))
+  if (sum(negIDs) > 0 && negative.rm) {
+    warning("rows with negative values have been removed", call. = FALSE)
+    dd <- dd[-which(negIDs),]
+    ee <- ee[-which(negIDs),]
+  } else if (sum(negIDs) > 0 && !negative.rm) {
+    warning("negative values have been replaced with 'tol'", call. = FALSE)
+    index <- (dd <= 0)
+    dd <- replace(dd, index, tol)
+    ee <- replace(ee, index, tol)
+  }
+
+  negIDs <- apply(ee, 1, function(z) any(z <= 0))
+  if (sum(negIDs) > 0 && negative.rm) {
+    warning("rows with negative values removed", call. = FALSE)
+    dd <- dd[-which(negIDs),]
+    ee <- ee[-which(negIDs),]
+  } else if (sum(negIDs) > 0 && !negative.rm) {
+    warning("negative values replaced with 'tol'", call. = FALSE)
+    index <- (ee <= 0)
+    dd <- replace(dd, index, tol)
+    ee <- replace(ee, index, tol)
+  }  
+  
   method <- match.arg(method, c("exposure", "information", "diversity", 
                                 "dissimilarity", "all"), several.ok = TRUE)
   if ("all" %in% method)
@@ -13,20 +44,17 @@ SegSpatial <- function(env, method = "all", useC = TRUE) {
 
   P <- matrix(0, nrow = 0, ncol = 0)
   H <- numeric(); R <- numeric(); D <- numeric()
-  if (any(env@env == 0))
-    warning("zero values will be ignored during the calulcation of H", 
-            call. = FALSE)
   
   if (useC) {
-    m <- ncol(env@data)
+    m <- ncol(dd)
     method <- c("exposure" %in% method, "information" %in% method,
                 "diversity" %in% method, "dissimilarity" %in% method)
-    tmp <- .Call("spseg", as.vector(env@data), as.vector(env@env), 
+    tmp <- .Call("spseg", as.vector(dd), as.vector(ee), 
                           as.integer(m), as.integer(method))
     results <- list(); n <- m^2
     if (!is.na(tmp[1])) {
       results$p <- matrix(tmp[1:n], ncol = m, byrow = TRUE)
-      rownames(results$p) <- colnames(results$p) <- colnames(env@data)
+      rownames(results$p) <- colnames(results$p) <- colnames(dd)
     }
     if (!is.na(tmp[n+1]))
       results$h <- tmp[n+1] 
@@ -38,23 +66,23 @@ SegSpatial <- function(env, method = "all", useC = TRUE) {
   
   else {
     # Number of population groups
-    m <- ncol(env@data)
+    m <- ncol(dd)
     # Total population in the study area
-    ptsSum <- sum(env@data)
+    ptsSum <- sum(dd)
     # Population of all groups at each data point
-    ptsRowSum <- apply(env@data, 1, sum)
+    ptsRowSum <- apply(dd, 1, sum)
     # Total population of each subgroup
-    ptsColSum <- apply(env@data, 2, sum)
+    ptsColSum <- apply(dd, 2, sum)
     # Proportion of each subgroup
     ptsProp <- ptsColSum / ptsSum
     # Population proportion of each group at each local environment
-    envProp <- t(apply(env@env, 1, function(z) z/sum(z)))
+    envProp <- t(apply(ee, 1, function(z) z/sum(z)))
 
     if ("exposure" %in% method) {
       P <- matrix(0, nrow = m, ncol = m)
-      rownames(P) <- colnames(P) <- colnames(env@data)
+      rownames(P) <- colnames(P) <- colnames(dd)
       for (i in 1:m) {
-        A <- env@data[, i] / ptsColSum[i]
+        A <- dd[, i] / ptsColSum[i]
         for (j in 1:m) {
           P[i, j] <- sum(A * envProp[, j])
         }

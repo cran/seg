@@ -2,8 +2,8 @@ useDynLib(seg)
 
 import(methods)
 
-export(SegLocalEnv, getSegLocalEnv, SegSpatial, spseg)
-exportClasses(SegLocalEnv, SegSpatial)
+export(SegLocalEnv, getSegLocalEnv, SegSpatial, spseg, seg, whiteseg)
+exportClasses(SegLocalEnv, SegSpatial, SegSpatialExt)
 exportMethods(show, coerce)
 
 S3method(print, SegLocalEnv)
@@ -15,3 +15,7 @@ S3method(points, SegLocalEnv)
 
 S3method(print, SegSpatial)
 S3method(as.list, SegSpatial)
+
+S3method(print, SegSpatialExt)
+S3method(as.list, SegSpatialExt)
+S3method(plot, SegSpatialExt)

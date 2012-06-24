@@ -90,7 +90,7 @@ as.list.SegLocalEnv <- function(x, ...) {
        proj4string = x@proj4string)
 }
 
-plot.SegLocalEnv <- function(x, which.col, ...) {
+plot.SegLocalEnv <- function(x, which.col, main, ...) {
   validObject(x)
   xx <- x@coords[,1]
   yy <- x@coords[,2]
@@ -99,14 +99,18 @@ plot.SegLocalEnv <- function(x, which.col, ...) {
   if (missing(which.col))
     which.col <- 1:ncol(env)
   numPlot <- length(which.col) 
-   
+  if (missing(main))
+    main <- paste("Data", 1:numPlot)
+  else if (length(main) < numPlot)
+    main <- rep(main, ceiling(numPlot/length(main)))
+
   for (i in 1:numPlot) {
     qq <- quantile(env[,i], probs = c(0.2, 0.4, 0.6, 0.8))
     brks <- length(qq) + 1
     size <- rep(brks, nrow(env))
     for (j in 1:brks)
       size[which(env[,i] <= qq[brks - j])] <- brks - j
-    plot(x = xx, y = yy, cex = size, ...)
+    plot(x = xx, y = yy, cex = size, main = main[i], ...)
   }
 }
 

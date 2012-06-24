@@ -1,11 +1,17 @@
 \name{SegSpatial-class}
 \docType{class}
 \alias{SegSpatial-class}
+\alias{SegSpatialExt-class}
 \alias{show,SegSpatial-method}
+\alias{show,SegSpatialExt-method}
 \alias{coerce,SegSpatial,list-method}
 \alias{coerce,list,SegSpatial-method}
+\alias{coerce,SegSpatialExt,list-method}
 \alias{print.SegSpatial-method}
 \alias{as.list.SegSpatial-method}
+\alias{plot.SegSpatialExt-method}
+\alias{print.SegSpatialExt-method}
+\alias{as.list.SegSpatialExt-method}
 
 \title{Class SegSpatial}
 \description{Class for spatial segregation index values.}
