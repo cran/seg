@@ -74,7 +74,7 @@ spseg <-
       cat("  Rasterise 'x' - this may take some time ...\n")
       begTimeSub <- Sys.time()
     }
-    r2 <- rasterize(x, r1, field = 0)
+    r2 <- rasterize(x, r1)
     studyarea <- which(!is.na(r2[]))
 
     # Transform the rasterized surface into a point data set

@@ -38,6 +38,7 @@ if (require(spdep)) {
   segdata.nb <- nb2mat(poly2nb(segdata, queen = FALSE), style = "B")
   segdata.nb <- segdata.nb / sum(segdata.nb)
   d <- numeric(); p <- numeric()
+  pd <- par()
   par(mfrow = c(2, 4), mar = c(0, 1, 0, 1))
   for (i in 1:8) {
     idx <- 2 * i
@@ -52,26 +53,5 @@ if (require(spdep)) {
     text(5, 11.5, labels = 
       paste("D = ", round(d[i], 2), ", P = ", round(p[i], 2), sep = ""))
   }
-  
-  data(nzcity)
-  dd <- numeric(); pp <- numeric()
-  for (i in 1:16) {
-    city.df <- data.frame(nzcity[[i]])
-    city.df <- cbind(city.df[,4], apply(city.df[,c(2:3, 5:7)], 1, sum))
-    city.nb <- nb2mat(poly2nb(nzcity[[i]], queen = FALSE), style = "B",
-                      zero.policy = TRUE)
-    city.nb <- city.nb / sum(city.nb)
-    dd <- append(dd, seg(city.df, city.nb))
-    pp <- append(pp, whiteseg(nzcity[[i]], city.df, fun = function(z) 1/z))
-  }
-  nzcity.lm <- lm(pp ~ dd)
-  summary(nzcity.lm)
-  plot(dd, pp, xlab = "D(adj)", ylab = "P", 
-       main = paste("Residential Segregation of\n",
-                    "Pacific Peoples in 16 New Zealand Cities", sep = ""))
-  abline(a = nzcity.lm$coefficients[1], 
-         b = nzcity.lm$coefficients[2], col = "Red", lty = "dotted")
-  which.pos <- c(3, 2, 2, 3, 3, 3, 2, 3, 3, 4, 3, 2, 3, 3, 3, 1)
-  text(dd, pp, pos = which.pos, labels = names(nzcity), cex = 0.8)
 }
 }

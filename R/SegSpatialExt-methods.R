@@ -112,6 +112,6 @@ setMethod("show", signature(object = "SegSpatialExt"), function(object) {
 # Coercion methods
 setAs("SegSpatialExt", "list", 
       function(from) {
-        validObject(x)
-        list(d = x@d, r = x@r, h = x@h, p = x@p)
+        validObject(from)
+        list(d = from@d, r = from@r, h = from@h, p = from@p)
       })

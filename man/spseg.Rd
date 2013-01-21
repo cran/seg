@@ -62,30 +62,4 @@ ranb <- spseg(xy, pop, smoothing = "kernel", useExp = FALSE,
 print(ranb, digits = 3)
 par(mfrow = c(1, 3), mar = c(0, 1, 0, 2.5))
 plot(ranb, main = "")
-
-# Auckland population data set
-data(auckpop2006)
-pp <- spseg(auckpop2006, smoothing = "kernel", maxdist = 3000)
-print(pp, digits = 3)
-par(mfrow = c(2, 3), mar = c(1, 1, 2.5, 2.5))
-plot(pp, main = names(auckpop2006))
-slot(pp, "sigma")
-qq <- spseg(auckpop2006, smoothing = "kernel", maxdist = 3000, sigma = 3000)
-print(qq, digits = 3)
-par(mfrow = c(2, 3), mar = c(1, 1, 2.5, 2.5))
-plot(qq, main = names(auckpop2006))
-rr <- spseg(auckpop2006, smoothing = "kernel", maxdist = 3000, sigma = 700)
-print(rr, digits = 3)
-par(mfrow = c(2, 3), mar = c(1, 1, 2.5, 2.5))
-plot(rr, main = names(auckpop2006))
-
-\dontrun{
-ee <- spseg(auckpop2006, smoothing = "equal", maxdist = 3000)
-print(ee, digits = 3)
-par(mfrow = c(2, 3), mar = c(1, 1, 2.5, 2.5))
-plot(ee, main = names(auckpop2006))
-ff <- spseg(auckpop2006, smoothing = "equal", maxdist = 100)
-gg <- spseg(auckpop2006, smoothing = "kernel", nrow = 300, ncol = 300, 
-            maxdist = 3000, verbose = TRUE)
-}
 }
