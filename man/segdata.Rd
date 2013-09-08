@@ -9,7 +9,7 @@ This data set contains eight different spatial configurations that were used by 
 data(segdata)
 }
 \format{
-A class of \code{SpatialPolygonsDataFrame}. The data slot contains 16 columns, representing eight idealised spatial patterns. Each column indicates the following information:
+An object of class \code{data.frame}. The data set contains 16 columns, representing eight idealised spatial patterns. Each column indicates the following information:
 
 \tabular{rll}{
   [,1] \tab A1 \tab Pattern A, Group 1 \cr
@@ -36,16 +36,21 @@ Morrill, R. L. (1991). On the measure of geographic segregation. \emph{Geography
 Wong, D. W. S. (1993). Spatial Indices of Segregation. \emph{Urban Studies}, \bold{30}, 559-572. 
 }
 \examples{
-data(segdata)
+require(sp); data(segdata)
+grd <- GridTopology(cellcentre.offset=c(0.5,0.5),
+                    cellsize=c(1,1), cells.dim=c(10,10))
+grd.sp <- as.SpatialPolygons.GridTopology(grd)
+pd <- par()
 par(mfrow = c(2, 4), mar = c(0, 1, 0, 1))
 for (i in 1:8) {
-  full <- data.frame(segdata)[,(2 * i)-1] == 100
-  half <- data.frame(segdata)[,(2 * i)-1] == 50
-  plot(segdata)
-  plot(segdata[full,], col = "Black", add = TRUE)
+  full <- segdata[,(2*i)-1] == 100
+  half <- segdata[,(2*i)-1] == 50
+  plot(grd.sp)
+  plot(grd.sp[full,], col = "Black", add = TRUE)
   if (any(half))
-    plot(segdata[half,], col = "Grey", add = TRUE)
+    plot(grd.sp[half,], col = "Grey", add = TRUE)
   text(5, 11.5, labels = paste("Pattern", LETTERS[i]))
 }
+par(mfrow = pd$mfrow, mar = pd$mar)
 }
 \keyword{datasets}

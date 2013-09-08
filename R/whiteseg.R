@@ -2,48 +2,54 @@
 # whiteseg()
 # ------------------------------------------------------------------------------
 whiteseg <- 
-  function(x, data, nb, method = "euclidean", p = 2, fun, verbose = FALSE) {
+  function(x, data, nb, fun, ...) {
 
-  tmp <- .SEGDATA(x, data, verbose)
-  coords <- tmp$coords; data <- tmp$data;
+  # The input object 'x' can be either a class of 'Spatial' (or its associates)
+  # or 'data.frame'. Depending on the class of 'x', 'data' may not be required.
+  # The internal function '.SEGDATA()' in spseg.R processes the information as
+  # required by the current function.
+  tmp <- .SEGDATA(x, data, verbose = FALSE)
+  coords <- tmp$coords; pdf <- tmp$data;
   rm(tmp)
 
   # Verify 'coords' and 'data'
-  if (ncol(data) < 2 || !is.numeric(data))
-    stop("'data' must be a numeric matrix with at least two columns", 
-         call. = FALSE)
-  else if (nrow(data) != nrow(coords))
+  if (ncol(pdf) < 2)
+    stop("'data' must be a matrix with at least two columns", call. = FALSE)
+  else if (!is.numeric(pdf))
+    stop("'data' must be a numeric matrix", call. = FALSE)
+  else if (nrow(pdf) != nrow(coords))
     stop("'data' must have the same number of rows as 'x'", call. = FALSE)
 
   # If the user did not specify 'dist', do the followings:
   if (missing(nb))
-    nb <- as.matrix(dist(x = coords, method = method, p = p))
+    nb <- as.matrix(dist(x = coords, ...))
   
-  # If 'fun' is not given, use the default option (i.e., negative exponential):
+  # If 'fun' is not given, use the default (i.e., negative exponential):
   if (missing(fun))
     fun <- function(z) { exp(-z) }
   
   # If the distance matrix is symmetric and if all the left-to-right diagonals
-  # are 0, we can save some time
+  # are 0, we can save some time:
   if (isSymmetric(nb)) {
-    subsets <- t(combn(1:nrow(nb), 2)) 
-    dd <- as.numeric(as.dist(nb)) 
-  } else {
-    subsets <- expand.grid(1:nrow(nb), 1:nrow(nb))
-    dd <- as.numeric(nb)
+    pairID <- t(combn(1:nrow(nb), 2))             # Pairs of census tracts
+    pairDist <- as.numeric(as.dist(nb))           # Distance between pairs
+  } else { # If not symmetric:
+    pairID <- expand.grid(1:nrow(nb), 1:nrow(nb)) # Pairs of census tracts
+    pairDist <- as.numeric(nb)                    # Distance between pairs
   }
-  INDEX <- which(dd != 0)
-  subsets <- subsets[INDEX,]
-  dd <- dd[INDEX]
+  VALID <- which(pairDist != 0)
+  pairID <- pairID[VALID,]
+  pairDist <- pairDist[VALID]
   
-  dfun <- fun(dd)
-  nTracts <- apply(data, 1, sum)
-  nGroups <- apply(data, 2, sum)
-
+  # Determines the degree of spatial interaction based on distances
+  speffect <- fun(pairDist)
+  
+  pRow <- apply(pdf, 1, sum) # Total population by census tracts
+  pCol <- apply(pdf, 2, sum) # Total population by groups
+  
   pA <- list()
-  pB <- sum(nTracts[subsets[,1]] * nTracts[subsets[,2]] * dfun) / sum(nGroups)
-  for (i in 1:ncol(data))
-    pA[[i]] <- sum(data[subsets[,1], i] * data[subsets[,2], i] * dfun) / 
-               nGroups[i]
-  sum(unlist(pA)) / pB
+  pB <- sum(pRow[pairID[,1]] * pRow[pairID[,2]] * speffect) / sum(pCol)
+  for (i in 1:ncol(pdf))
+    pA[[i]] <- sum(pdf[pairID[,1],i] * pdf[pairID[,2],i] * speffect) / pCol[i]
+  return(as.vector(sum(unlist(pA)) / pB))
 }

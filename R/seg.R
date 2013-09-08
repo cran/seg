@@ -1,40 +1,47 @@
 # ------------------------------------------------------------------------------
-# seg()
+# Function 'seg'
+#
+# Author: Seong-Yun Hong <hong.seongyun@gmail.com>
+# Last update: 7 September 2013
+# Depends: -
 # ------------------------------------------------------------------------------
 seg <- 
-  function(data, nb, verbose = FALSE) {
+  function(data, nb, tol = .Machine$double.eps) {
 
   if (ncol(data) > 2)
-    warning("'x' has more than two columns; only the first two will be used")
-  b <- data[,1]/sum(data[,1])
-  w <- data[,2]/sum(data[,2])
-  z <- data[,1]/(apply(data, 1, sum) + .Machine$double.eps)
-  d <- sum(abs(b-w))/2
+    warning("'data' has more than two columns; only the first two will be used")
   
-  if (!missing(nb)) {  
-    if (isSymmetric(nb)) {
-      subsets <- t(combn(1:nrow(nb), 2))
-      dd <- as.numeric(as.dist(nb))
-    } else {
-      subsets <- expand.grid(1:nrow(nb), 1:nrow(nb))
-      dd <- as.numeric(nb)
-    }
-    INDEX <- which(dd != 0)
-    subsets <- subsets[INDEX,]
-    dd <- dd[INDEX]
-    # The code below should work fine but slow!
-    #
-    # dd <- numeric()
-    # for (i in 1:nrow(subsets)) {
-    #   rr <- subsets[i, 1]
-    #   cc <- subsets[i, 2]
-    #   dd <- append(dd, nb[rr, cc])
-    # }
+  # Duncan and Duncan's index of dissimilarity
+  b <- data[,1]/sum(data[,1])     # Blacks
+  w <- data[,2]/sum(data[,2])     # Whites
+  d <- sum(abs(b-w))/2
 
-    dm <- sum(abs(z[subsets[,1]] - z[subsets[,2]]) * dd)
-    d <- d - dm
+  if (!missing(nb)) {     # If information on geographic distance between
+                          # spatial units is provided:
+    if (!is.matrix(nb))
+      stop("'nb' must be a matrix", call. = FALSE)
+    else if (nrow(nb) != ncol(nb))
+      stop("'nb' must be a square matrix", call. = FALSE)
+    else if (nrow(nb) != nrow(data))
+      stop("nrow(nb) must match nrow(data)", call. = FALSE)
+    
+    # Black proportions in census tracts
+    z <- data[,1]/(apply(data, 1, sum) + .Machine$double.eps)
+    # Additional spatial component value
+    spstr <- 0
+    nbvec <- as.vector(nb)
+    INDEX <- which(nbvec != 0)
+    for (i in 1:length(INDEX)) {
+      rowID <- INDEX[i] %% nrow(nb)
+      colID <- INDEX[i] %/% nrow(nb)
+      if (rowID == 0)
+        rowID <- nrow(nb)
+      else
+        colID <- colID + 1
+      spstr <- spstr + (abs(z[colID] - z[rowID]) * nbvec[INDEX[i]])
+    }
+    d <- d - spstr
   }
   
-  return(d)
+  return(as.vector(d))
 }
-

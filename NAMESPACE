@@ -1,6 +1,8 @@
 useDynLib(seg)
 
-import(methods)
+import(methods, stats, sp)
+importFrom(raster, raster, rasterize, rasterToPoints)
+importFrom(spatstat, owin, ppp, bw.diggle, density.ppp)
 
 export(SegLocalEnv, getSegLocalEnv, SegSpatial, spseg, seg, whiteseg)
 exportClasses(SegLocalEnv, SegSpatial, SegSpatialExt)
