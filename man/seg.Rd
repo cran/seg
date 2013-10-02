@@ -17,7 +17,7 @@ seg(data, nb, tol = .Machine$double.eps)
 
 If \sQuote{nb} is a rook-based contiguity matrix standardised by the total number of neighbours, the calculation follows the Morrill's adjusted index of dissimilarity (1991). See the example code below and \code{help(nb2mat)} for more information regarding how to construct such a matrix. 
 
-If \sQuote{nb} contains row-standardised shared boundary lengths between geographic units, the computed index is Wong's adjusted D. In \R, \code{vect2neigh} in the \pkg{spgrass6} package can be used to obtain the shared boundary lengths.
+For Wong's D(w) and D(s), see https://sites.google.com/site/hongseongyun/seg. Note that the sum of all elements in \sQuote{nb} should equal one.
 }
 \value{
 A single numeric value between 0 and 1, indicating the degree of segregation; 0 for no segregation, and 1 for complete segregation.

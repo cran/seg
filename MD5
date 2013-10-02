@@ -1,4 +1,4 @@
-17a3f1b84dd4926fe823d55271ca7686 *DESCRIPTION
+b8635abbbd979edda9396c135d5db93f *DESCRIPTION
 1ac9e22b0cf1fde407e7266b016f7087 *NAMESPACE
 4a22658c5112ddbbf49a26b986ebd69d *R/SegLocalEnv-class.R
 0c42bc93e9c4634778600c5e890d81f8 *R/SegLocalEnv-methods.R
@@ -9,15 +9,15 @@ a5b223bd0b447ca4347e89c979771c62 *R/SegSpatial.R
 e011b157dd6ba1293420b7d69bb1177a *R/SegSpatialExt-class.R
 3b3aa8ee25bd0dd10ac98f5d0ea05470 *R/SegSpatialExt-methods.R
 9926d754f330ef07bdf24354b3ed3977 *R/getSegLocalEnv.R
-109faeb30990b8120b8ca4ecbc55587c *R/seg.R
+ed3af7fd3b950fa8339375b59106d392 *R/seg.R
 61709d48ad2a9b704dcd1d449f7f4f5e *R/spseg.R
 1e49a96963a2fec2a226973869a32165 *R/whiteseg.R
-d4101671110df4a98bc18a8225686ae4 *data/segdata.rda
+230d258122b8f6fc4bc0bb05ad2d473d *data/segdata.rda
 f5488633815a4f88f34947552ef98700 *man/SegLocalEnv-class.Rd
 2eac0c2973f02e2342cb0837f3f5bd16 *man/SegLocalEnv.Rd
 9211a65a28fb896c84888780c4fb7ede *man/SegSpatial-class.Rd
 97b7beeb8beb6a7f43fbb5536ed0aecf *man/getSegLocalEnv.Rd
-715bc2c249941a20ebe5369039e6f2c0 *man/seg.Rd
+118cabfa5bedd2ce91efd42d1a0a5e8c *man/seg.Rd
 337d9789ae9427ea44fc24c6bc45347b *man/segdata.Rd
 e43fa3a2d1c2d5aa306d34fe623f5d4e *man/spseg.Rd
 58ca9657f59dc519758d9c3779be56db *man/update.Rd

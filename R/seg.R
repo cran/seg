@@ -25,6 +25,9 @@ seg <-
     else if (nrow(nb) != nrow(data))
       stop("nrow(nb) must match nrow(data)", call. = FALSE)
     
+    if (sum(nb) != 1)
+      warning("the sum of all elements in 'nb' does not equal 1", call. = FALSE)
+    
     # Black proportions in census tracts
     z <- data[,1]/(apply(data, 1, sum) + .Machine$double.eps)
     # Additional spatial component value
