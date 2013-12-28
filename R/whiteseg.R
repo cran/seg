@@ -1,14 +1,16 @@
 # ------------------------------------------------------------------------------
 # whiteseg()
 # ------------------------------------------------------------------------------
-whiteseg <- 
-  function(x, data, nb, fun, ...) {
+whiteseg <- function(x, data, nb, fun, verbose = FALSE, ...) {
 
   # The input object 'x' can be either a class of 'Spatial' (or its associates)
   # or 'data.frame'. Depending on the class of 'x', 'data' may not be required.
-  # The internal function '.SEGDATA()' in spseg.R processes the information as
-  # required by the current function.
-  tmp <- .SEGDATA(x, data, verbose = FALSE)
+  # The internal function 'chksegdata()' processes the information as required
+  # by the current function.
+  if (verbose)
+    tmp <- chksegdata(x, data)
+  else
+    tmp <- suppressMessages(chksegdata(x, data))
   coords <- tmp$coords; pdf <- tmp$data;
   rm(tmp)
 
@@ -51,5 +53,6 @@ whiteseg <-
   pB <- sum(pRow[pairID[,1]] * pRow[pairID[,2]] * speffect) / sum(pCol)
   for (i in 1:ncol(pdf))
     pA[[i]] <- sum(pdf[pairID[,1],i] * pdf[pairID[,2],i] * speffect) / pCol[i]
-  return(as.vector(sum(unlist(pA)) / pB))
+  
+  as.vector(sum(unlist(pA)) / pB)
 }

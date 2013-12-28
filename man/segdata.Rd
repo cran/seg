@@ -36,10 +36,11 @@ Morrill, R. L. (1991). On the measure of geographic segregation. \emph{Geography
 Wong, D. W. S. (1993). Spatial Indices of Segregation. \emph{Urban Studies}, \bold{30}, 559-572. 
 }
 \examples{
-require(sp); data(segdata)
+data(segdata)
 grd <- GridTopology(cellcentre.offset=c(0.5,0.5),
                     cellsize=c(1,1), cells.dim=c(10,10))
 grd.sp <- as.SpatialPolygons.GridTopology(grd)
+
 pd <- par()
 par(mfrow = c(2, 4), mar = c(0, 1, 0, 1))
 for (i in 1:8) {

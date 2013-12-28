@@ -1,21 +1,22 @@
 \name{whiteseg}
 \alias{whiteseg}
-\title{Calculate White's Segregation Measure}
+\title{Index of Spatial Proximity}
 \description{
-\code{whiteseg} computes White's P index. Unlike the traditional, aspatial index of dissimilarity, this measure incorporates the spatial relationships among the geographic units into the calculation, so it does not suffer from the checkerboard problem.
+Computes the index of spatial proximity developed by White (1983). This measure estimates the level of clustering by comparing the average distance between members of the same group with that between all individuals (regardless of the groups to which they belong). The results may change drastically depending on the definition of distance.
 }
 \usage{
-whiteseg(x, data, nb, fun, ...)
+whiteseg(x, data, nb, fun, verbose = FALSE, \dots)
 }
 \arguments{
   \item{x}{a numeric matrix or data frame with coordinates (each row is a point), or an object of class \code{Spatial}.}
-  \item{data}{an object of class \code{matrix}, or one that can be coerced to that class. The number of rows in \sQuote{data} should equal the number of geographic units in \sQuote{x}, and the number of columns should be greater than one (at least two population groups are required). This can be missing if \sQuote{x} has a data frame attached to it.}
+  \item{data}{an object of class \code{matrix}, or one that can be coerced to that class. The number of rows in \sQuote{data} should equal the number of geographic units in \sQuote{x}, and the number of columns should be greater than one (i.e., at least two population groups are required). This can be missing if \sQuote{x} has a data frame attached to it.}
   \item{nb}{an optional \code{matrix} object indicating the distances between the geographic units.}
   \item{fun}{a function for the calculation of proximity. The function should take a numeric vector as an argument (distance) and return a vector of the same length (proximity). If this is not specified, a negative exponential function is used by default.}
-  \item{...}{optional arguments to be passed to \code{dist} when calculating the distances between the geographic units in \sQuote{x}. Ignored if \sQuote{nb} is given. See \code{help(dist)} for available options.}
+  \item{verbose}{logical. If TRUE, print the current stage of the computation and time spent on each job to the screen.}
+  \item{\dots}{optional arguments to be passed to \code{dist} when calculating the distances between the geographic units in \sQuote{x}. Ignored if \sQuote{nb} is given. See \code{help(dist)} for available options.}
 }
 \details{
-\sQuote{nb} must be a square matrix (same number of rows and columns) but does not have to be symmetric. When \sQuote{nb} is not specified, \code{whiteseg} computes the distance matrix of \sQuote{x} using the specified optional arguments in \sQuote{...}.
+\sQuote{nb} must be a square matrix (i.e., one that has the same number of rows and columns) but does not have to be symmetric. If \sQuote{nb} is not given, \code{whiteseg} attempts to create a distance matrix of \sQuote{x} using the function \code{dist} in \pkg{stats} and use it as \sQuote{nb}. The optional arguments in \sQuote{\dots} will be passed to \code{dist}.
 }
 \value{
 A single numeric value indicating the degree of segregation; a value of 1 indicates absence of segregation, and values greater than 1.0 indicate clustering. If the index value is less than one, it indicates an unusual form of segregation (i.e., people live closer to other population groups).
@@ -27,20 +28,17 @@ Seong-Yun Hong
 White, M. J. (1983). The measurement of spatial segregation. \emph{The American Journal of Sociology}, \bold{88}, 1008-1018.
 }
 \seealso{
-\code{\link{seg}}, \code{\link{spseg}}, \code{dist}
+\code{\link{seg}}, \code{dist}
 }
 \examples{
-require(sp)
+# uses the idealised landscapes in 'segdata'
+data(segdata)
 grd <- GridTopology(cellcentre.offset=c(0.5,0.5),
                     cellsize=c(1,1), cells.dim=c(10,10))
 grd.sp <- as.SpatialPolygons.GridTopology(grd)
 
-data(segdata)
-parval <- par()
-par(mfrow = c(2, 4), mar = c(0, 1, 0, 1))
-
-d <- numeric()
-p <- numeric()
+d <- numeric() # index of dissimilarity
+p <- numeric() # index of spatial proximity
 for (i in 1:8) {
   idx <- 2 * i
   d <- append(d, seg(segdata[,(idx-1):idx]))
@@ -54,5 +52,4 @@ for (i in 1:8) {
   text(5, 11.5, labels = 
        paste("D = ", round(d[i], 2), ", P = ", round(p[i], 2), sep = ""))
 }
-par(mfrow = parval$mfrow, mar = parval$mar)
 }

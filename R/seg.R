@@ -2,15 +2,22 @@
 # Function 'seg'
 #
 # Author: Seong-Yun Hong <hong.seongyun@gmail.com>
-# Last update: 7 September 2013
+# Last update: 22 December 2013
 # Depends: -
 # ------------------------------------------------------------------------------
-seg <- 
-  function(data, nb, tol = .Machine$double.eps) {
+seg <- function(data, nb) {
 
-  if (ncol(data) > 2)
-    warning("'data' has more than two columns; only the first two will be used")
-  
+  if (ncol(data) > 2) {
+    warning("'data' has more than two columns; only the first two are used",
+            call. = FALSE)
+    data <- data[,1:2]
+  }
+  if (any(data < 0))
+    stop("negative value(s) in 'data'", call. = FALSE)
+  colsum <- apply(data, 2, sum)
+  if (any(colsum <= 0))
+    stop("the sum of each column in 'data' must be > 0", call. = FALSE)
+      
   # Duncan and Duncan's index of dissimilarity
   b <- data[,1]/sum(data[,1])     # Blacks
   w <- data[,2]/sum(data[,2])     # Whites
@@ -27,9 +34,19 @@ seg <-
     
     if (sum(nb) != 1)
       warning("the sum of all elements in 'nb' does not equal 1", call. = FALSE)
+
+    rowsum <- apply(data, 1, sum)
+    removeID <- which(rowsum == 0)
+    removeL <- length(removeID)
+    if (removeL > 0) {
+      warning("remove ", removeL, " rows with no population", call. = FALSE)
+      rowsum <- rowsum[-removeID]
+      data <- data[-removeID,]
+      nb <- nb[-removeID, -removeID]
+    }
     
     # Black proportions in census tracts
-    z <- data[,1]/(apply(data, 1, sum) + .Machine$double.eps)
+    z <- data[,1] / rowsum
     # Additional spatial component value
     spstr <- 0
     nbvec <- as.vector(nb)
@@ -46,5 +63,5 @@ seg <-
     d <- d - spstr
   }
   
-  return(as.vector(d))
+  as.vector(d)
 }
