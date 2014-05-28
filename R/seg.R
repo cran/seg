@@ -7,6 +7,9 @@
 # ------------------------------------------------------------------------------
 seg <- function(data, nb) {
 
+  message("Note: seg() will be deprecated soon.")
+  message("Use dissim() instead. See help(dissim) for details.")
+  
   if (ncol(data) > 2) {
     warning("'data' has more than two columns; only the first two are used",
             call. = FALSE)

@@ -1,10 +1,12 @@
-\name{whiteseg}
+\name{isp}
+\alias{isp}
 \alias{whiteseg}
 \title{Index of Spatial Proximity}
 \description{
 Computes the index of spatial proximity developed by White (1983). This measure estimates the level of clustering by comparing the average distance between members of the same group with that between all individuals (regardless of the groups to which they belong). The results may change drastically depending on the definition of distance.
 }
 \usage{
+isp(x, data, nb, fun, verbose = FALSE, \dots)
 whiteseg(x, data, nb, fun, verbose = FALSE, \dots)
 }
 \arguments{
@@ -21,6 +23,8 @@ whiteseg(x, data, nb, fun, verbose = FALSE, \dots)
 \value{
 A single numeric value indicating the degree of segregation; a value of 1 indicates absence of segregation, and values greater than 1.0 indicate clustering. If the index value is less than one, it indicates an unusual form of segregation (i.e., people live closer to other population groups).
 }
+\note{
+The function name \code{whiteseg()} was changed in version 0.4-3 to \code{isp()}. The old function name will be deprecated from 0.6-1.}
 \author{
 Seong-Yun Hong
 }
@@ -37,12 +41,12 @@ grd <- GridTopology(cellcentre.offset=c(0.5,0.5),
                     cellsize=c(1,1), cells.dim=c(10,10))
 grd.sp <- as.SpatialPolygons.GridTopology(grd)
 
-d <- numeric() # index of dissimilarity
-p <- numeric() # index of spatial proximity
+d <- rep(NA, 8) # index of dissimilarity
+p <- rep(NA, 8) # index of spatial proximity
 for (i in 1:8) {
   idx <- 2 * i
-  d <- append(d, seg(segdata[,(idx-1):idx]))
-  p <- append(p, whiteseg(grd.sp, data = segdata[,(idx-1):idx]))
+  d[i] <- seg(segdata[,(idx-1):idx])
+  p[i] <- whiteseg(grd.sp, data = segdata[,(idx-1):idx])
   full <- segdata[,(idx-1)] == 100
   half <- segdata[,(idx-1)] == 50
   plot(grd.sp)
