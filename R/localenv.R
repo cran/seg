@@ -3,8 +3,8 @@
 #
 # Author: Seong-Yun Hong <hong.seongyun@gmail.com>
 # ------------------------------------------------------------------------------
-localenv <- function(x, data, power = 2, useExp = TRUE, maxdist, sprel, 
-  tol = .Machine$double.eps) {
+localenv <- function(x, data, power = 2, useExp = TRUE, scale = FALSE,
+                     maxdist, sprel, tol = .Machine$double.eps) {
   
   tmp <- suppressMessages(chksegdata(x, data))
   coords <- tmp$coords; data <- tmp$data; proj4string <- tmp$proj4string
@@ -21,7 +21,7 @@ localenv <- function(x, data, power = 2, useExp = TRUE, maxdist, sprel,
   else if (class(sprel) != "nb" && class(sprel) != "dist")
     stop("invalid object 'sprel'", call. = FALSE)
 
-  env <- localenv.get(sprel, data, power, useExp, maxdist, tol)
+  env <- localenv.get(sprel, data, power, useExp, scale, maxdist, tol)
 
   SegLocal(coords, data, env, CRS(proj4string))
 }
