@@ -1,4 +1,4 @@
-9a98092de34981b0355e510645878894 *DESCRIPTION
+c9c92061c79777e3a60d26e9ee5cf41e *DESCRIPTION
 e5089f5788eacd156a1b646c7de3f217 *NAMESPACE
 9a6f7ba9c8b74da956497227aa572c1c *R/SegDecomp-class.R
 2ad925e0f45b4ff5884342ea90a85b73 *R/SegDecomp-methods.R
@@ -14,7 +14,7 @@ f363c3faf5a4ba65b8691b62944c2d3f *R/deseg.R
 b2f0a7b3e4d5ec2ca7e151d7f9e7e5fd *R/dissim.R
 837b31859007718a15e9cbe2d9f8d99f *R/dissim.internals.R
 ceb9e10e3034e59c911ba89f9e36cea0 *R/isp.R
-cd3201c873382ad986753d93b7c22b45 *R/localenv.R
+29e0e365541f33f9a7b6285180931a51 *R/localenv.R
 fddd65fdc2a04323249cc40938a54ba4 *R/localenv.get.R
 8d26e6d741f3f300952a2b14b694af94 *R/seg.R
 368ce5f4ab4311dc79814c22c4ad0251 *R/spatseg.R
@@ -36,6 +36,6 @@ ac10d1194dcfca38743eb39623d46ff2 *man/SegSpatial.Rd
 d5a8b3e3cefc61fad1d2562d5adfd4b1 *man/localenv.Rd
 1c2154b3f46c369e563300d2b2e95fa1 *man/segdata.Rd
 68e64da15f2d85fd5a5e609a6e8401fd *man/spseg.Rd
-3703026d22ee9d62e2b3089d718c65b1 *src/envconstruct.c
+3c96fdaaae74e594bc0e4c064001c57c *src/envconstruct.c
 7dff48d98716494f2ca44f2fd7cf5cd8 *src/seg_init.c
 674c8df83141236ace684ca59253c487 *src/spsegIDX.c
